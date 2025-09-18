@@ -44,7 +44,7 @@ const PublicInvoices: React.FC = () => {
     if (searchTerm.trim() === '') {
       setFilteredInvoices(invoices);
     } else {
-      const filtered = invoices.filter(invoice => 
+      const filtered = invoices.filter(invoice =>
         invoice.customer_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         invoice.invoice_number.toString().includes(searchTerm) ||
         invoice.mechanic_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -61,7 +61,6 @@ const PublicInvoices: React.FC = () => {
         .from('invoices')
         .select('*')
         .order('created_at', { ascending: false });
-      
       if (error) throw error;
       setInvoices(data || []);
     } catch (error) {
@@ -107,11 +106,24 @@ const PublicInvoices: React.FC = () => {
         .eq('client_id', invoice.customer_id)
         .single();
 
+      const { data: listServices, error: serviceError } = await supabase
+        .from('services')
+        .select('*');
+
+      const services = invoice.order_data.services.map(item => {
+        const service = listServices.find(s => s.id === item.service_id);
+        return {
+          ...item,
+          service: service ? { name: service.name } : null
+        };
+      });
+
       // Prepare invoice data for the InvoiceGenerator component
       const invoiceForDisplay = {
         ...invoice,
         clientData: clientData,
-        services: invoice.order_data?.services || [],
+        services: services || [],
+        listServices: listServices,
         totals: {
           servicesSubtotal: invoice.subtotal - (invoice.parts_extra_value || 0) - ((invoice.parts_extra_value || 0) * (invoice.parts_fee_pct || 0) / 100),
           partsSubtotal: invoice.parts_extra_value || 0,
@@ -121,7 +133,7 @@ const PublicInvoices: React.FC = () => {
           total: invoice.total
         }
       };
-      
+
       setSelectedInvoice(invoiceForDisplay);
       setShowInvoiceDetails(true);
     } catch (error) {
@@ -217,7 +229,7 @@ const PublicInvoices: React.FC = () => {
                       </div>
                       <p className="text-white font-bold">MGU-{invoice.invoice_number}</p>
                     </div>
-                    
+
                     <div>
                       <div className="flex items-center space-x-2 mb-1">
                         <User className="h-4 w-4 text-blue-400" />
@@ -225,7 +237,7 @@ const PublicInvoices: React.FC = () => {
                       </div>
                       <p className="text-white font-medium">{invoice.customer_id}</p>
                     </div>
-                    
+
                     <div>
                       <div className="flex items-center space-x-2 mb-1">
                         <DollarSign className="h-4 w-4 text-green-400" />
@@ -233,7 +245,7 @@ const PublicInvoices: React.FC = () => {
                       </div>
                       <p className="text-green-400 font-bold">${invoice.total.toLocaleString()}</p>
                     </div>
-                    
+
                     <div>
                       <div className="flex items-center space-x-2 mb-1">
                         <Calendar className="h-4 w-4 text-yellow-400" />
@@ -255,7 +267,7 @@ const PublicInvoices: React.FC = () => {
                         </span>
                       </p>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => viewInvoiceDetails(invoice)}
@@ -264,7 +276,7 @@ const PublicInvoices: React.FC = () => {
                         <Eye className="h-4 w-4" />
                         <span>Ver Detalhes</span>
                       </button>
-                      
+
                       {canDeleteInvoices && (
                         <button
                           onClick={() => deleteInvoice(invoice.id)}

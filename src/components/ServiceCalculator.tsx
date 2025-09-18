@@ -306,7 +306,7 @@ const ServiceCalculator: React.FC = () => {
             service_id: service.service_id || "",
             quantity: Number(service.quantity) || 0,
             is_external: Boolean(service.is_external),
-            subtotal: Number(service.subtotal) || 0
+            subtotal: Number(service.subtotal) || 0,
           })),
           extra_parts_value: Number(calculator.extraPartsValue) || 0,
           client_type: calculator.clientType || 'cliente',
