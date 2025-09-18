@@ -22,7 +22,7 @@ interface CalculatorState {
   partsTaxPercent: number;
   discountValue: number;
   discountPercent: number;
-  clientId: string;
+  client_id: string;
   clientData: any;
   mechanicName: string;
   location: 'internal' | 'external';
@@ -39,7 +39,7 @@ const ServiceCalculator: React.FC = () => {
     partsTaxPercent: 0,
     discountValue: 0,
     discountPercent: 0,
-    clientId: '',
+    client_id: '',
     clientData: null,
     mechanicName: '',
     location: 'internal'
@@ -60,8 +60,8 @@ const ServiceCalculator: React.FC = () => {
   }, [currentUser]);
 
   // Buscar dados do cliente quando ID é inserido
-  const searchClientData = async (clientId: string) => {
-    if (!clientId.trim()) {
+  const searchClientData = async (client_id: string) => {
+    if (!client_id.trim()) {
       setCalculator(prev => ({ ...prev, clientData: null }));
       return;
     }
@@ -72,7 +72,7 @@ const ServiceCalculator: React.FC = () => {
       const { data: clientData, error: clientError } = await supabase
         .from('clients')
         .select('*')
-        .eq('client_id', clientId)
+        .eq('client_id', client_id)
         .single();
 
       if (clientData && !clientError) {
@@ -88,7 +88,7 @@ const ServiceCalculator: React.FC = () => {
         const { data: mechanicData, error: mechanicError } = await supabase
           .from('mechanics')
           .select('*')
-          .eq('id', clientId)
+          .eq('id', client_id)
           .single();
 
         if (mechanicData && !mechanicError) {
@@ -121,13 +121,13 @@ const ServiceCalculator: React.FC = () => {
   // Debounce para busca do cliente
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (calculator.clientId) {
-        searchClientData(calculator.clientId);
+      if (calculator.client_id) {
+        searchClientData(calculator.client_id);
       }
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [calculator.clientId]);
+  }, [calculator.client_id]);
 
   // Atualizar taxa automaticamente quando valor das peças ou tipo de cliente muda
   useEffect(() => {
@@ -262,7 +262,7 @@ const ServiceCalculator: React.FC = () => {
   const totals = calculateTotals();
 
   const generateInvoice = async () => {
-    if (!calculator.clientId || !calculator.mechanicName) {
+    if (!calculator.client_id || !calculator.mechanicName) {
       alert('Preencha o ID do cliente e nome do mecânico');
       return;
     }
@@ -286,7 +286,7 @@ const ServiceCalculator: React.FC = () => {
       
       // Prepare invoice data with all required fields and proper defaults
       const invoiceData = {
-        customer_id: calculator.clientId || "teste",
+        customer_id: calculator.client_id || "teste",
         mechanic_name: calculator.mechanicName || "desconhecido", 
         mechanic_uuid: currentUser?.id,
         client_uuid: null, // Will be set when we have client lookup
@@ -299,7 +299,7 @@ const ServiceCalculator: React.FC = () => {
         total: Number(calculatedTotals.total) || 0,
         invoice_number: invoiceNumber,
         order_data: {
-          client_id: calculator.clientId || "teste",
+          client_id: calculator.client_id || "teste",
           mechanic_name: calculator.mechanicName || "desconhecido",
           location: calculator.location,
           services: calculator.selectedServices.map(service => ({
@@ -343,7 +343,7 @@ const ServiceCalculator: React.FC = () => {
         .from('notifications')
         .insert({
           type: 'invoice',
-          message: `Nova nota fiscal gerada: MGU-${invoiceNumber} - Cliente: ${calculator.clientId}`,
+          message: `Nova nota fiscal gerada: MGU-${invoiceNumber} - Cliente: ${calculator.client_id}`,
           is_read: false
         });
 
@@ -371,7 +371,7 @@ const ServiceCalculator: React.FC = () => {
         partsTaxPercent: 0,
         discountValue: 0,
         discountPercent: 0,
-        clientId: '',
+        client_id: '',
         clientData: null,
         mechanicName: currentUser?.type === 'mechanic' ? currentUser.full_name : '',
         location: 'internal'
@@ -402,8 +402,8 @@ const ServiceCalculator: React.FC = () => {
             <div className="relative">
               <input
                 type="text"
-                value={calculator.clientId}
-                onChange={(e) => setCalculator(prev => ({ ...prev, clientId: e.target.value }))}
+                value={calculator.client_id}
+                onChange={(e) => setCalculator(prev => ({ ...prev, client_id: e.target.value }))}
                 className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-3 pr-10 text-white focus:border-red-600 focus:outline-none"
                 placeholder="Ex: 12345"
               />
@@ -693,16 +693,16 @@ const ServiceCalculator: React.FC = () => {
 
         <button
           onClick={generateInvoice}
-          disabled={!canGenerateInvoices || !calculator.clientId || !calculator.mechanicName || calculator.selectedServices.length === 0}
+          disabled={!canGenerateInvoices || !calculator.client_id || !calculator.mechanicName || calculator.selectedServices.length === 0}
           className={`w-full mt-6 ${
-            (!canGenerateInvoices || !calculator.clientId || !calculator.mechanicName || calculator.selectedServices.length === 0)
+            (!canGenerateInvoices || !calculator.client_id || !calculator.mechanicName || calculator.selectedServices.length === 0)
               ? 'bg-gray-600 cursor-not-allowed' 
               : 'bg-red-600 hover:bg-red-700'
           } text-white py-4 rounded-lg font-bold transition-colors flex items-center justify-center`}
         >
           <FileText className="h-5 w-5 mr-2" />
           {!canGenerateInvoices ? 'Apenas Mecânicos Podem Gerar Notas Fiscais' : 
-           (!calculator.clientId || !calculator.mechanicName || calculator.selectedServices.length === 0) ? 
+           (!calculator.client_id || !calculator.mechanicName || calculator.selectedServices.length === 0) ? 
            'Preencha os Dados para Gerar Nota Fiscal' : 'Gerar Nota Fiscal'}
         </button>
         
