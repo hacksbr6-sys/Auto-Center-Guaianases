@@ -99,10 +99,18 @@ const PublicInvoices: React.FC = () => {
   };
 
   const viewInvoiceDetails = async (invoice: Invoice) => {
+    console.log(invoice)
     try {
+      const { data: clientData, error: clientError } = await supabase
+        .from('clients')
+        .select('*')
+        .eq('client_id', invoice.customer_id)
+        .single();
+
       // Prepare invoice data for the InvoiceGenerator component
       const invoiceForDisplay = {
         ...invoice,
+        clientData: clientData,
         services: invoice.order_data?.services || [],
         totals: {
           servicesSubtotal: invoice.subtotal - (invoice.parts_extra_value || 0) - ((invoice.parts_extra_value || 0) * (invoice.parts_fee_pct || 0) / 100),

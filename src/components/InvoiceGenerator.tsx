@@ -19,6 +19,8 @@ const InvoiceGenerator: React.FC<InvoiceProps> = ({ invoice, onClose }) => {
     window.print();
   };
 
+  console.log(invoice)
+
   return (
     <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4">
       <motion.div
@@ -63,7 +65,7 @@ const InvoiceGenerator: React.FC<InvoiceProps> = ({ invoice, onClose }) => {
                   <Settings className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-red-600">MECÂNICA GUAIANASES</h1>
+                  <h1 className="text-2xl font-bold text-red-600">MECÂNICA GUAIANASES LTDA</h1>
                   <p className="text-gray-600">GuaianaseRP</p>
                 </div>
               </div>
@@ -292,15 +294,15 @@ const InvoiceGenerator: React.FC<InvoiceProps> = ({ invoice, onClose }) => {
               <p className="text-gray-600">Qualidade, confiança e tradição desde sempre</p>
             </div>
             
-            <div className="border-t border-gray-300 pt-4 mt-4">
-              <p className="text-gray-500">
-                Esta nota fiscal foi gerada eletronicamente e é válida sem assinatura
-              </p>
-            </div>
-            
             <p className="mt-4 text-xs">
               Nota fiscal gerada automaticamente em {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
             </p>
+
+            <div className="border-t border-gray-300 pt-4 mt-4">
+              <p className="text-gray-500 pt-4">
+                Sem valor fiscal, é apenas demonstrativo para utilização no GuaianaseRP.
+              </p>
+            </div>
           </div>
         </div>
       </motion.div>
