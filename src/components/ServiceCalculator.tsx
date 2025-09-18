@@ -693,16 +693,16 @@ const ServiceCalculator: React.FC = () => {
 
         <button
           onClick={generateInvoice}
-          disabled={!canGenerateInvoices || !calculator.client_id || !calculator.mechanicName || calculator.selectedServices.length === 0}
+          disabled={!canGenerateInvoices || !calculator.client_id || !calculator.mechanicName}
           className={`w-full mt-6 ${
-            (!canGenerateInvoices || !calculator.client_id || !calculator.mechanicName || calculator.selectedServices.length === 0)
+            (!canGenerateInvoices || !calculator.client_id || !calculator.mechanicName)
               ? 'bg-gray-600 cursor-not-allowed' 
               : 'bg-red-600 hover:bg-red-700'
           } text-white py-4 rounded-lg font-bold transition-colors flex items-center justify-center`}
         >
           <FileText className="h-5 w-5 mr-2" />
           {!canGenerateInvoices ? 'Apenas Mecânicos Podem Gerar Notas Fiscais' : 
-           (!calculator.client_id || !calculator.mechanicName || calculator.selectedServices.length === 0) ? 
+           (!calculator.client_id || !calculator.mechanicName) ? 
            'Preencha os Dados para Gerar Nota Fiscal' : 'Gerar Nota Fiscal'}
         </button>
         
