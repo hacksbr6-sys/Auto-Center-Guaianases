@@ -28,6 +28,7 @@ export interface RegisterClientData {
   phone?: string;
   address?: string;
   password: string;
+  client_id: string;
 }
 
 export interface RegisterMechanicData {
@@ -89,6 +90,7 @@ export const registerClient = async (data: RegisterClientData): Promise<{ succes
         email: data.email,
         phone: data.phone,
         address: data.address,
+        client_id: data.client_id,
         password: hashPassword(data.password)
       }])
       .select()

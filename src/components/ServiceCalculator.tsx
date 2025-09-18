@@ -72,7 +72,7 @@ const ServiceCalculator: React.FC = () => {
       const { data: clientData, error: clientError } = await supabase
         .from('clients')
         .select('*')
-        .eq('id', clientId)
+        .eq('client_id', clientId)
         .single();
 
       if (clientData && !clientError) {

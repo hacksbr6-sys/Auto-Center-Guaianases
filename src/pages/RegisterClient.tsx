@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { UserPlus, User, Mail, Phone, Lock, MapPin, Settings } from 'lucide-react';
+import { UserPlus, User, Mail, Phone, Lock, MapPin, Settings, SquareUser } from 'lucide-react';
 import { registerClient, setCurrentUser } from '../lib/auth';
 
 const RegisterClient: React.FC = () => {
@@ -12,7 +12,8 @@ const RegisterClient: React.FC = () => {
     phone: '',
     password: '',
     confirmPassword: '',
-    address: ''
+    address: '',
+    client_id: ''
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +40,8 @@ const RegisterClient: React.FC = () => {
       email: formData.email,
       phone: formData.phone,
       password: formData.password,
-      address: formData.address
+      address: formData.address,
+      client_id: formData.client_id
     });
     
     if (result.success && result.user) {
@@ -161,6 +163,21 @@ const RegisterClient: React.FC = () => {
                 onChange={(e) => setFormData(prev => ({ ...prev, confirmPassword: e.target.value }))}
                 className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none"
                 placeholder="Digite a senha novamente"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-white font-medium mb-2">
+                <SquareUser className="h-4 w-4 inline mr-2" />
+                RG
+              </label>
+              <input
+                type="text"
+                value={formData.client_id}
+                onChange={(e) => setFormData(prev => ({ ...prev, client_id: e.target.value }))}
+                className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-blue-600 focus:outline-none"
+                placeholder=""
                 required
               />
             </div>
