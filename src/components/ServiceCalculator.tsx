@@ -267,11 +267,6 @@ const ServiceCalculator: React.FC = () => {
       return;
     }
 
-    if (calculator.selectedServices.length === 0) {
-      alert('Adicione pelo menos um serviço');
-      return;
-    }
-
     // Verificar se usuário tem permissão para gerar notas fiscais
     if (!hasPermission('generate_invoices')) {
       alert('Você não tem permissão para gerar notas fiscais');
