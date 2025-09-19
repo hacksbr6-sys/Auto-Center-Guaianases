@@ -91,7 +91,7 @@ const Home: React.FC = () => {
   ];
 
   const achievements = [
-    { icon: <Star className="h-8 w-8" />, number: "15+", label: "Anos de Experiência", color: "text-yellow-400" },
+    { icon: <Star className="h-8 w-8" />, number: "10+", label: "Anos de Experiência", color: "text-yellow-400" },
     { icon: <Users className="h-8 w-8" />, number: "500+", label: "Clientes Satisfeitos", color: "text-blue-400" },
     { icon: <Clock className="h-8 w-8" />, number: "24h", label: "Atendimento", color: "text-green-400" },
     { icon: <Award className="h-8 w-8" />, number: "100%", label: "Qualidade Garantida", color: "text-red-400" }
