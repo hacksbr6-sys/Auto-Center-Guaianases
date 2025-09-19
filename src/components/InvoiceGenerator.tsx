@@ -73,8 +73,8 @@ const InvoiceGenerator: React.FC<InvoiceProps> = ({ invoice, onClose }) => {
                 <p>Oficina Mecânica Especializada</p>
                 <p>Cidade: Guaianases</p>
                 <p>Servidor: GuaianaseRP</p>
-                <p>CNPJ: 12.345.678/0001-90</p>
-                <p>Telefone: (11) 3456-7890</p>
+                <p>CNPJ: 00.000.000/0000-00</p>
+                <p>Telefone: 045-488</p>
               </div>
             </div>
             <div className="text-right">
