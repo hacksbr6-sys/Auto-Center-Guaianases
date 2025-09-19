@@ -2,8 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Car, Wrench, Shield, Clock, Camera, MapPin, Users, Gamepad2, Star, Award, Zap, Phone } from 'lucide-react';
+import ServicesTable from '../components/ServicesTable';
 
 const Home: React.FC = () => {
+  const [showServicesTable, setShowServicesTable] = React.useState(false);
+
   const features = [
     {
       icon: <Car className="h-8 w-8" />,
@@ -337,6 +340,20 @@ const Home: React.FC = () => {
             <p className="text-xl text-gray-400 max-w-2xl mx-auto">
               Somos a oficina de confiança dos melhores players de GuaianaseRP
             </p>
+            
+            {/* Botão da Tabela de Preços */}
+            <div className="mt-8">
+              <button
+                onClick={() => setShowServicesTable(true)}
+                className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center space-x-3 mx-auto"
+              >
+                <Wrench className="h-6 w-6" />
+                <span>Ver Tabela de Preços dos Serviços</span>
+              </button>
+              <p className="text-gray-400 text-sm mt-2">
+                Confira todos os preços para atendimento interno e externo
+              </p>
+            </div>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -481,6 +498,11 @@ const Home: React.FC = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Services Table Modal */}
+      {showServicesTable && (
+        <ServicesTable onClose={() => setShowServicesTable(false)} />
+      )}
     </div>
   );
 };
