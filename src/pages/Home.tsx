@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Car, Wrench, Shield, Clock, Camera, MapPin, Users, Gamepad2, Star, Award, Zap, Phone } from 'lucide-react';
+import { Car, Wrench, Shield, Clock, Camera, MapPin, Users, Gamepad2, Star, Award, Zap, Phone, MessageCircle } from 'lucide-react';
 import ServicesTable from '../components/ServicesTable';
 
 const Home: React.FC = () => {
@@ -451,6 +451,99 @@ const Home: React.FC = () => {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Enhanced Discord CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-black via-gray-900 to-red-900 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-red-600/20 to-transparent"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-red-600/30 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-red-600/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+
+        <div className="max-w-4xl mx-auto px-4 text-center text-white relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            {/* Discord Logo */}
+            <div className="flex items-center justify-center mb-8">
+              <div className="bg-gradient-to-br from-indigo-600 to-purple-700 p-6 rounded-3xl shadow-2xl transform hover:scale-110 transition-transform duration-300">
+                <MessageCircle className="h-16 w-16 text-white" />
+              </div>
+            </div>
+
+            <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
+              <span className="bg-gradient-to-r from-indigo-400 via-purple-500 to-indigo-600 bg-clip-text text-transparent drop-shadow-2xl">
+                JUNTE-SE
+              </span>
+              <br />
+              <span className="text-white drop-shadow-2xl">AO NOSSO DISCORD</span>
+            </h2>
+            
+            <div className="w-32 h-1 bg-gradient-to-r from-indigo-500 to-purple-600 mx-auto mb-8"></div>
+            
+            <p className="text-xl md:text-2xl mb-10 opacity-90 leading-relaxed max-w-3xl mx-auto">
+              Conecte-se com a comunidade de GuaianaseRP, receba atualizações exclusivas e 
+              tire suas dúvidas diretamente com nossa equipe!
+            </p>
+            
+            {/* Discord Features */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              <div className="bg-gradient-to-br from-black/60 to-indigo-900/20 backdrop-blur-sm rounded-2xl p-6 border border-indigo-600/30 shadow-2xl">
+                <div className="bg-indigo-600/20 p-3 rounded-xl w-fit mx-auto mb-4">
+                  <Users className="h-8 w-8 text-indigo-400" />
+                </div>
+                <h3 className="text-white font-bold text-lg mb-2">Comunidade Ativa</h3>
+                <p className="text-gray-300 text-sm">Converse com outros players e faça novos amigos</p>
+              </div>
+              
+              <div className="bg-gradient-to-br from-black/60 to-purple-900/20 backdrop-blur-sm rounded-2xl p-6 border border-purple-600/30 shadow-2xl">
+                <div className="bg-purple-600/20 p-3 rounded-xl w-fit mx-auto mb-4">
+                  <Zap className="h-8 w-8 text-purple-400" />
+                </div>
+                <h3 className="text-white font-bold text-lg mb-2">Suporte </h3>
+                <p className="text-gray-300 text-sm">Atendimento direto com nossa equipe</p>
+              </div>
+              
+              <div className="bg-gradient-to-br from-black/60 to-red-900/20 backdrop-blur-sm rounded-2xl p-6 border border-red-600/30 shadow-2xl">
+                <div className="bg-red-600/20 p-3 rounded-xl w-fit mx-auto mb-4">
+                  <Star className="h-8 w-8 text-red-400" />
+                </div>
+                <h3 className="text-white font-bold text-lg mb-2">Novidades</h3>
+                <p className="text-gray-300 text-sm">Seja o primeiro a saber das atualizações</p>
+              </div>
+            </div>
+            
+            {/* Discord Button */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <a
+                href="https://discord.gg/guaianases"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-700 hover:via-purple-700 hover:to-indigo-800 px-12 py-6 rounded-2xl text-xl font-black transition-all duration-300 transform hover:scale-105 hover:shadow-2xl overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative flex items-center justify-center space-x-4">
+                  <MessageCircle className="h-8 w-8" />
+                  <span>Entrar no Discord</span>
+                  <div className="bg-white/20 px-3 py-1 rounded-full text-sm font-bold">
+                    GRÁTIS
+                  </div>
+                </div>
+              </a>
+            </div>
+            
+            {/* Additional Info */}
+            <div className="mt-8 bg-gradient-to-r from-black/50 to-transparent backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
+              <p className="text-gray-300 text-sm">
+                🎮 <strong>discord.gg/guaianases</strong> • Mais de 500+ membros ativos • Servidor Disponível 24/7
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
