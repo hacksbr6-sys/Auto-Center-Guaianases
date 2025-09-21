@@ -145,7 +145,10 @@ const ServicesTable: React.FC<ServicesTableProps> = ({ onClose }) => {
                       <div className="flex items-center justify-center space-x-1">
                         <DollarSign className="h-5 w-5 text-green-400" />
                         <span className="text-green-400 font-black text-xl">
-                          {Number(service.price_inshop || 0).toLocaleString()}
+                          {Number(service.price_inshop || 0).toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                          })}
                         </span>
                       </div>
                     </td>
@@ -153,7 +156,10 @@ const ServicesTable: React.FC<ServicesTableProps> = ({ onClose }) => {
                       <div className="flex items-center justify-center space-x-1">
                         <DollarSign className="h-5 w-5 text-yellow-400" />
                         <span className="text-yellow-400 font-black text-xl">
-                          {Number(service.price_offsite || 0).toLocaleString()}
+                          {Number(service.price_offsite || 0).toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                          })}
                         </span>
                       </div>
                     </td>
