@@ -182,8 +182,7 @@ const ServicesTable: React.FC<ServicesTableProps> = ({ onClose }) => {
               <ul className="text-blue-300 space-y-2">
                 <li>• Preços podem variar conforme complexidade do serviço</li>
                 <li>• Orçamento gratuito para todos os serviços</li>
-                <li>• Garantia de 30 dias em todos os serviços</li>
-                <li>• Peças com garantia do fabricante</li>
+                <li>• Garantia de 15 dias em todos os serviços</li>
               </ul>
             </div>
             <div className="bg-gradient-to-br from-red-600/20 to-red-800/10 backdrop-blur-sm border border-red-600/50 rounded-xl p-6 shadow-lg">
@@ -192,8 +191,7 @@ const ServicesTable: React.FC<ServicesTableProps> = ({ onClose }) => {
                 <span>Contato e Agendamento</span>
               </h4>
               <ul className="text-red-300 space-y-2">
-                <li>• Atendimento 24 horas por dia</li>
-                <li>• Agendamento via Discord ou telefone</li>
+                <li>• Atendimento 08:00 a 23:00 Todos os dias</li>
                 <li>• Atendimento emergencial disponível</li>
                 <li>• Desconto para clientes frequentes</li>
               </ul>
