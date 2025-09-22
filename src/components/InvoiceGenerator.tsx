@@ -175,10 +175,10 @@ const InvoiceGenerator: React.FC<InvoiceProps> = ({ invoice, onClose }) => {
                       </td>
                       <td className="border border-gray-300 text-center p-3 font-medium">{item.quantity}</td>
                       <td className="border border-gray-300 text-right p-3">
-                        ${(item.subtotal / item.quantity).toLocaleString()}
+                        R${(item.subtotal / item.quantity).toLocaleString()}
                       </td>
                       <td className="border border-gray-300 text-right p-3 font-bold">
-                        ${item.subtotal.toLocaleString()}
+                        R${item.subtotal.toLocaleString()}
                       </td>
                     </tr>
                   ))}
@@ -213,7 +213,7 @@ const InvoiceGenerator: React.FC<InvoiceProps> = ({ invoice, onClose }) => {
                             <td className="border border-gray-300 text-center p-3">{part.quantity}</td>
                             <td className="border border-gray-300 text-right p-3">${part.price.toLocaleString()}</td>
                             <td className="border border-gray-300 text-right p-3 font-bold">
-                              ${(part.price * part.quantity).toLocaleString()}
+                              R${(part.price * part.quantity).toLocaleString()}
                             </td>
                           </tr>
                         ))}
@@ -222,7 +222,7 @@ const InvoiceGenerator: React.FC<InvoiceProps> = ({ invoice, onClose }) => {
                   </div>
                 ) : (
                   <div className="text-center py-4">
-                    <p className="text-gray-700 font-medium">Valor total de peças extras: ${invoice.parts_extra_value?.toLocaleString() || '0'}</p>
+                    <p className="text-gray-700 font-medium">Valor total de peças extras: R${invoice.parts_extra_value?.toLocaleString() || '0'}</p>
                     <p className="text-gray-600 text-sm">Detalhamento não especificado</p>
                   </div>
                 )}
@@ -238,30 +238,30 @@ const InvoiceGenerator: React.FC<InvoiceProps> = ({ invoice, onClose }) => {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-gray-700">Subtotal Serviços:</span>
-                    <span className="font-medium">${invoice.totals.servicesSubtotal.toLocaleString()}</span>
+                    <span className="font-medium">R${invoice.totals.servicesSubtotal.toLocaleString()}</span>
                   </div>
                   {invoice.totals.partsSubtotal > 0 && (
                     <div className="flex justify-between">
                       <span className="text-gray-700">Subtotal Peças:</span>
-                      <span className="font-medium">${invoice.totals.partsSubtotal.toLocaleString()}</span>
+                      <span className="font-medium">R${invoice.totals.partsSubtotal.toLocaleString()}</span>
                     </div>
                   )}
                   {invoice.totals.partsTax > 0 && (
                     <div className="flex justify-between text-orange-600">
                       <span>Taxa de Peças ({invoice.parts_fee_pct || 0}%):</span>
-                      <span className="font-medium">${invoice.totals.partsTax.toLocaleString()}</span>
+                      <span className="font-medium">R${invoice.totals.partsTax.toLocaleString()}</span>
                     </div>
                   )}
                   {invoice.totals.discountAmount > 0 && (
                     <div className="flex justify-between text-green-600">
                       <span>Desconto:</span>
-                      <span className="font-medium">-${invoice.totals.discountAmount.toLocaleString()}</span>
+                      <span className="font-medium">-R${invoice.totals.discountAmount.toLocaleString()}</span>
                     </div>
                   )}
                   <div className="border-t-2 border-gray-400 pt-3 mt-3">
                     <div className="flex justify-between font-bold text-xl">
                       <span>Total Geral:</span>
-                      <span className="text-red-600">${invoice.totals.total.toLocaleString()}</span>
+                      <span className="text-red-600">R${invoice.totals.total.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>

@@ -519,10 +519,10 @@ const ServiceCalculator: React.FC = () => {
               <div className="flex justify-between items-center mb-3">
                 <div>
                   <p className="text-green-400 font-bold">
-                    Interno: ${Number(service.price_inshop || 0).toLocaleString()}
+                    Interno: R${Number(service.price_inshop || 0).toLocaleString()}
                   </p>
                   <p className="text-yellow-400 font-bold">
-                    Externo: ${Number(service.price_offsite || 0).toLocaleString()}
+                    Externo: R${Number(service.price_offsite || 0).toLocaleString()}
                   </p>
                 </div>
                 {service.requires_tow && (
@@ -559,7 +559,7 @@ const ServiceCalculator: React.FC = () => {
                   <div className="flex-1">
                     <h4 className="text-white font-medium">{service.name}</h4>
                     <p className="text-gray-400 text-sm">
-                      {item.is_external ? 'Atendimento Externo' : 'Atendimento Interno'} - ${price.toLocaleString()}
+                      {item.is_external ? 'Atendimento Externo' : 'Atendimento Interno'} - R${price.toLocaleString()}
                     </p>
                   </div>
                   <div className="flex items-center space-x-4">
@@ -579,7 +579,7 @@ const ServiceCalculator: React.FC = () => {
                       </button>
                     </div>
                     <div className="text-white font-bold w-20 text-right">
-                      ${(Number(item.subtotal) || 0).toLocaleString()}
+                      R${(Number(item.subtotal) || 0).toLocaleString()}
                     </div>
                   </div>
                 </div>
@@ -660,28 +660,28 @@ const ServiceCalculator: React.FC = () => {
         <div className="space-y-3">
           <div className="flex justify-between text-gray-400">
             <span>Subtotal dos Serviços:</span>
-            <span>${totals.servicesSubtotal.toLocaleString()}</span>
+            <span>R${totals.servicesSubtotal.toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-gray-400">
             <span>Subtotal das Peças:</span>
-            <span>${totals.partsSubtotal.toLocaleString()}</span>
+            <span>R${totals.partsSubtotal.toLocaleString()}</span>
           </div>
           {totals.partsTax > 0 && (
             <div className="flex justify-between text-yellow-400">
               <span>Taxa de Peças ({calculator.partsTaxPercent}%):</span>
-              <span>${totals.partsTax.toLocaleString()}</span>
+              <span>R${totals.partsTax.toLocaleString()}</span>
             </div>
           )}
           {totals.discountAmount > 0 && (
             <div className="flex justify-between text-green-400">
               <span>Desconto Total:</span>
-              <span>-${totals.discountAmount.toLocaleString()}</span>
+              <span>-R${totals.discountAmount.toLocaleString()}</span>
             </div>
           )}
           <div className="border-t border-gray-700 pt-3">
             <div className="flex justify-between text-white text-2xl font-bold">
               <span>Total Geral:</span>
-              <span className="text-red-400">${totals.total.toLocaleString()}</span>
+              <span className="text-red-400">R${totals.total.toLocaleString()}</span>
             </div>
           </div>
         </div>
