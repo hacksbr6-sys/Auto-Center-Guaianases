@@ -624,6 +624,7 @@ const RegionalDashboard: React.FC = () => {
                             {notification.type === 'car_sale' && 'Venda de Veículo'}
                             {notification.type === 'invoice' && 'Nova Nota Fiscal'}
                             {notification.type === 'mechanic_registration' && 'Registro de Mecânico'}
+                            {notification.type === 'job_application' && 'Candidatura de Emprego'}
                             {notification.type === 'general' && 'Geral'}
                           </span>
                           {!notification.is_read && (
@@ -637,6 +638,45 @@ const RegionalDashboard: React.FC = () => {
                         }`}>
                           {notification.message}
                         </p>
+                        
+                        {/* Mostrar dados da candidatura se for job_application */}
+                        {notification.type === 'job_application' && notification.application_data && (
+                          <div className="mt-3 bg-gray-800 rounded-lg p-3 border border-gray-700">
+                            <h5 className="text-white font-medium mb-2">Dados do Candidato:</h5>
+                            <div className="grid grid-cols-2 gap-2 text-sm">
+                              <div>
+                                <span className="text-gray-400">Nome:</span>
+                                <p className="text-white font-medium">{notification.application_data.nome}</p>
+                              </div>
+                              <div>
+                                <span className="text-gray-400">CPF:</span>
+                                <p className="text-white">{notification.application_data.cpf}</p>
+                              </div>
+                              <div>
+                                <span className="text-gray-400">Idade:</span>
+                                <p className="text-white">{notification.application_data.idade} anos</p>
+                              </div>
+                              <div>
+                                <span className="text-gray-400">Telefone:</span>
+                                <p className="text-white">{notification.application_data.telefone}</p>
+                              </div>
+                            </div>
+                            
+                            {/* Botões de ação para candidaturas */}
+                            <div className="flex space-x-2 mt-4">
+                              <button className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
+                                Entrar em Contato
+                              </button>
+                              <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
+                                Agendar Entrevista
+                              </button>
+                              <button className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
+                                Arquivar
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                        
                         <p className="text-gray-500 text-sm mt-2">
                           {new Date(notification.created_at).toLocaleString('pt-BR')}
                         </p>
