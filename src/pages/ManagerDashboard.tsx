@@ -11,11 +11,13 @@ import {
   Eye, 
   Check,
   AlertCircle,
-  Settings
+  Settings,
+  Users
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { getCurrentUser } from '../lib/auth';
 import { useNotifications, useCars } from '../hooks/useSupabase';
+import JobApplicationsManager from '../components/JobApplicationsManager';
 
 interface CarForm {
   brand: string;
@@ -32,8 +34,9 @@ const ManagerDashboard: React.FC = () => {
   const { notifications, unreadCount, refetch: refetchNotifications } = useNotifications();
   const { cars, refetch: refetchCars } = useCars();
   
-  const [activeTab, setActiveTab] = useState<'cars' | 'notifications'>('cars');
+  const [activeTab, setActiveTab] = useState<'cars' | 'notifications' | 'applications'>('cars');
   const [showAddCarModal, setShowAddCarModal] = useState(false);
+  const [showJobApplications, setShowJobApplications] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [carForm, setCarForm] = useState<CarForm>({
     brand: '',
@@ -198,6 +201,17 @@ const ManagerDashboard: React.FC = () => {
               </span>
             )}
           </button>
+          <button
+            onClick={() => setActiveTab('applications')}
+            className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
+              activeTab === 'applications'
+                ? 'bg-purple-600 text-white'
+                : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            <Users className="h-4 w-4" />
+            <span>Candidaturas</span>
+          </button>
         </div>
 
         {/* Cars Tab */}
@@ -261,6 +275,43 @@ const ManagerDashboard: React.FC = () => {
           </motion.div>
         )}
 
+        {/* Applications Tab */}
+        {activeTab === 'applications' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-6"
+          >
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-white">Candidaturas de Emprego</h2>
+              <button
+                onClick={() => setShowJobApplications(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition-colors flex items-center space-x-2"
+              >
+                <Users className="h-4 w-4" />
+                <span>Ver Candidaturas</span>
+              </button>
+            </div>
+            
+            <div className="bg-purple-600/10 border border-purple-600 rounded-xl p-6">
+              <h3 className="text-xl font-bold text-purple-400 mb-4">Gestão de Candidaturas - Nível Gerencial</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <p className="text-white font-medium">📋 Visualizar candidaturas recebidas</p>
+                  <p className="text-white font-medium">📞 Entrar em contato com candidatos</p>
+                  <p className="text-white font-medium">📝 Encaminhar para RH</p>
+                  <p className="text-white font-medium">🗂️ Arquivar candidaturas processadas</p>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-white font-medium">🔍 Buscar candidatos específicos</p>
+                  <p className="text-white font-medium">📊 Acompanhar status das candidaturas</p>
+                  <p className="text-white font-medium">👥 Avaliar perfil dos candidatos</p>
+                  <p className="text-white font-medium">📈 Relatórios de candidaturas</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
         {/* Notifications Tab */}
         {activeTab === 'notifications' && (
           <motion.div
@@ -314,6 +365,7 @@ const ManagerDashboard: React.FC = () => {
                             {notification.type === 'car_sale' && 'Venda de Veículo'}
                             {notification.type === 'invoice' && 'Nova Nota Fiscal'}
                             {notification.type === 'mechanic_registration' && 'Registro de Mecânico'}
+                            {notification.type === 'job_application' && 'Candidatura de Emprego'}
                             {notification.type === 'general' && 'Geral'}
                           </span>
                           {!notification.is_read && (
@@ -327,6 +379,45 @@ const ManagerDashboard: React.FC = () => {
                         }`}>
                           {notification.message}
                         </p>
+                        
+                        {/* Mostrar dados da candidatura se for job_application */}
+                        {notification.type === 'job_application' && notification.application_data && (
+                          <div className="mt-3 bg-gray-800 rounded-lg p-3 border border-gray-700">
+                            <h5 className="text-white font-medium mb-2">Dados do Candidato:</h5>
+                            <div className="grid grid-cols-2 gap-2 text-sm">
+                              <div>
+                                <span className="text-gray-400">Nome:</span>
+                                <p className="text-white font-medium">{notification.application_data.nome}</p>
+                              </div>
+                              <div>
+                                <span className="text-gray-400">CPF:</span>
+                                <p className="text-white">{notification.application_data.cpf}</p>
+                              </div>
+                              <div>
+                                <span className="text-gray-400">Idade:</span>
+                                <p className="text-white">{notification.application_data.idade} anos</p>
+                              </div>
+                              <div>
+                                <span className="text-gray-400">Telefone:</span>
+                                <p className="text-white">{notification.application_data.telefone}</p>
+                              </div>
+                            </div>
+                            
+                            {/* Botões de ação para candidaturas */}
+                            <div className="flex space-x-2 mt-4">
+                              <button className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
+                                Entrar em Contato
+                              </button>
+                              <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
+                                Encaminhar para RH
+                              </button>
+                              <button className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
+                                Arquivar
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                        
                         <p className="text-gray-500 text-sm mt-2">
                           {new Date(notification.created_at).toLocaleString('pt-BR')}
                         </p>
@@ -349,6 +440,11 @@ const ManagerDashboard: React.FC = () => {
           </motion.div>
         )}
       </div>
+
+      {/* Job Applications Modal */}
+      {showJobApplications && (
+        <JobApplicationsManager onClose={() => setShowJobApplications(false)} />
+      )}
 
       {/* Add Car Modal */}
       {showAddCarModal && (
