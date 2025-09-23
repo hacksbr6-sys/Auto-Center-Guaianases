@@ -41,6 +41,12 @@ export interface Notification {
   message: string;
   is_read: boolean;
   created_at: string;
+  application_data?: {
+    nome: string;
+    cpf: string;
+    idade: string;
+    telefone: string;
+  };
 }
 
 export interface Client {
@@ -79,6 +85,16 @@ export interface PurchaseRequest {
   status: string;
   created_at: string;
   cars?: Car;
+}
+
+export interface JobApplication {
+  id: string;
+  full_name: string;
+  cpf: string;
+  age: number;
+  phone: string;
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
 }
 
 // Hook para carros
@@ -381,4 +397,45 @@ export const usePurchaseRequests = () => {
   }, []);
 
   return { requests, loading, error, refetch: fetchRequests };
+};
+
+// Hook para candidaturas de emprego
+export const useJobApplications = () => {
+  const [applications, setApplications] = useState<JobApplication[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchApplications = async () => {
+    console.log('[useJobApplications] Buscando candidaturas...');
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const { data, error } = await supabase
+        .from('job_applications')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('[useJobApplications] Erro ao buscar candidaturas:', error);
+        setError(error.message);
+        setApplications([]);
+      } else {
+        console.log('[useJobApplications] Candidaturas carregadas:', data?.length || 0);
+        setApplications(data || []);
+      }
+    } catch (error: any) {
+      console.error('[useJobApplications] Erro inesperado:', error);
+      setError('Erro inesperado ao carregar candidaturas');
+      setApplications([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchApplications();
+  }, []);
+
+  return { applications, loading, error, refetch: fetchApplications };
 };
