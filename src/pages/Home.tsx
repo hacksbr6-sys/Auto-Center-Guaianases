@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Car, Wrench, Shield, Clock, Camera, MapPin, Users, Gamepad2, Star, Award, Zap, Phone, MessageCircle } from 'lucide-react';
 import ServicesTable from '../components/ServicesTable';
+import JobApplicationModal from '../components/JobApplicationModal';
 
 const Home: React.FC = () => {
   const [showServicesTable, setShowServicesTable] = React.useState(false);
+  const [showJobApplication, setShowJobApplication] = React.useState(false);
 
   const features = [
     {
@@ -349,11 +351,20 @@ const Home: React.FC = () => {
               >
                 <Wrench className="h-6 w-6" />
                 <span>Ver Tabela de Preços dos Serviços</span>
-              </button>
+              </button> 
+              <div className="mt-4">
+                <button
+                  onClick={() => setShowJobApplication(true)}
+                  className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center space-x-3 mx-auto"
+                >
+                  <Users className="h-6 w-6" />
+                  <span>Venha Trabalhar Conosco</span>
+                </button>
+              </div>
+            </div>
               <p className="text-gray-400 text-sm mt-2">
                 Confira todos os preços para atendimento interno e externo
               </p>
-            </div>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -399,7 +410,7 @@ const Home: React.FC = () => {
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-red-700 mx-auto mb-6"></div>
             <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              Nossos mecânicos são especialistas com anos de experiência e dedicação total ao seu veículo
+ Nossos mecânicos são especialistas com anos de experiência e dedicação total ao seu veículo
             </p>
           </motion.div>
 
@@ -591,10 +602,14 @@ const Home: React.FC = () => {
           </motion.div>
         </div>
       </section>
-
       {/* Services Table Modal */}
       {showServicesTable && (
         <ServicesTable onClose={() => setShowServicesTable(false)} />
+      )}
+
+      {/* Job Application Modal */}
+      {showJobApplication && (
+        <JobApplicationModal onClose={() => setShowJobApplication(false)} />
       )}
     </div>
   );
