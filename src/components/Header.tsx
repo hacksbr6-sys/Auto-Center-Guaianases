@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Settings, Bell, LogOut, User, Shield } from 'lucide-react';
+import { Settings, Bell, LogOut, User, Shield, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getCurrentUser, logout, canAccessRoute, canAccessAdmin } from '../lib/auth';
 import { useNotifications } from '../hooks/useSupabase';
+import JobApplicationsManager from './JobApplicationsManager';
 
 const Header: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentUser = getCurrentUser();
   const { unreadCount } = useNotifications();
+  const [showJobApplications, setShowJobApplications] = useState(false);
   
   // Define navigation items based on user type and permissions
   const getNavItems = () => {
@@ -220,6 +222,19 @@ const Header: React.FC = () => {
           <div className="flex items-center space-x-4">
             {currentUser ? (
               <div className="flex items-center space-x-4">
+                {/* Job Applications Button for Mechanics */}
+                {currentUser.type === 'mechanic' && currentUser.approved && (
+                  <button
+                    onClick={() => setShowJobApplications(true)}
+                    className="relative flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <Users className="h-4 w-4 text-white" />
+                    <span className="text-white text-sm font-medium">
+                      Candidaturas
+                    </span>
+                  </button>
+                )}
+                
                 {/* Supervisor Panel Access for Encarregados */}
                 {currentUser.type === 'mechanic' && currentUser.approved && currentUser.position === 'encarregado' && (
                   <Link
@@ -403,6 +418,11 @@ const Header: React.FC = () => {
         <div className="bg-yellow-600 text-black px-4 py-2 text-center text-sm font-medium">
           ⚠️ Sua conta está aguardando aprovação do ADMEC. Funcionalidades limitadas até a aprovação.
         </div>
+      )}
+
+      {/* Job Applications Modal */}
+      {showJobApplications && (
+        <JobApplicationsManager onClose={() => setShowJobApplications(false)} />
       )}
 
       {/* Position-based access info */}
