@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, User, FileText, Calendar, Phone, Check, X, Eye, Trash2, Search } from 'lucide-react';
+import { Users, User, FileText, Calendar, Phone, Check, X, Trash2, Search } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { getCurrentUser } from '../lib/auth';
 
@@ -54,12 +54,10 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
   const filterApplications = () => {
     let filtered = applications;
 
-    // Filtrar por status
     if (statusFilter !== 'all') {
       filtered = filtered.filter(app => app.status === statusFilter);
     }
 
-    // Filtrar por termo de busca
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(app =>
@@ -81,14 +79,12 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
 
       if (error) throw error;
 
-      // Atualizar lista local
       setApplications(prev =>
         prev.map(app =>
           app.id === applicationId ? { ...app, status: newStatus } : app
         )
       );
 
-      // Criar notificação sobre a ação
       const application = applications.find(app => app.id === applicationId);
       if (application) {
         await supabase
@@ -123,7 +119,6 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
 
       if (error) throw error;
 
-      // Remover da lista local
       setApplications(prev => prev.filter(app => app.id !== applicationId));
 
       alert('Candidatura excluída com sucesso!');
@@ -167,7 +162,7 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-gray-900 rounded-xl max-w-6xl w-full max-h-[90vh] overflow-auto border border-blue-600"
+        className="bg-gray-900 rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-blue-600"
       >
         {/* Header */}
         <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 p-6 flex items-center justify-between">
@@ -324,22 +319,4 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
 
         {/* Footer */}
         <div className="border-t border-gray-800 p-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="text-sm text-gray-400">
-              <p>💡 <strong>Dica:</strong> Use os filtros para encontrar candidaturas específicas</p>
-              <p>📋 Candidaturas aprovadas podem ser convertidas em contas de mecânico pelo ADMEC</p>
-            </div>
-            <button
-              onClick={onClose}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition-colors"
-            >
-              Fechar
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    </div>
-  );
-};
-
-export default JobApplicationsManager;
+          <div className="flex
