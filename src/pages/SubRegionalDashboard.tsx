@@ -510,8 +510,8 @@ const SubRegionalDashboard: React.FC = () => {
                                 <p className="text-white font-medium">{notification.application_data.nome}</p>
                               </div>
                               <div>
-                                <span className="text-gray-400">CPF:</span>
-                                <p className="text-white">{notification.application_data.cpf}</p>
+                                <span className="text-gray-400">ID:</span>
+                                <p className="text-white">{notification.application_data.id_game}</p>
                               </div>
                               <div>
                                 <span className="text-gray-400">Idade:</span>

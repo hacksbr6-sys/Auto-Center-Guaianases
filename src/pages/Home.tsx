@@ -196,6 +196,14 @@ const Home: React.FC = () => {
                   <span>Calcular Serviços</span>
                 </div>
               </Link>
+              
+              <button
+                onClick={() => setShowJobApplication(true)}
+                className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-10 py-5 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center space-x-3 mx-auto"
+              >
+                <Users className="h-6 w-6" />
+                <span>Venha Trabalhar Conosco</span>
+              </button>
             </motion.div>
 
             {/* Quick Contact */}
@@ -352,15 +360,6 @@ const Home: React.FC = () => {
                 <Wrench className="h-6 w-6" />
                 <span>Ver Tabela de Preços dos Serviços</span>
               </button> 
-              <div className="mt-4">
-                <button
-                  onClick={() => setShowJobApplication(true)}
-                  className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center space-x-3 mx-auto"
-                >
-                  <Users className="h-6 w-6" />
-                  <span>Venha Trabalhar Conosco</span>
-                </button>
-              </div>
             </div>
               <p className="text-gray-400 text-sm mt-2">
                 Confira todos os preços para atendimento interno e externo

@@ -792,7 +792,7 @@ const AdminDashboard: React.FC = () => {
                   <p className="text-white font-medium">🗑️ Excluir candidaturas antigas</p>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-white font-medium">🔍 Buscar por nome, CPF ou telefone</p>
+                  <p className="text-white font-medium">🔍 Buscar por nome, ID ou telefone</p>
                   <p className="text-white font-medium">📊 Filtrar por status da candidatura</p>
                   <p className="text-white font-medium">📞 Dados de contato completos</p>
                   <p className="text-white font-medium">👥 Converter aprovados em mecânicos</p>
@@ -880,8 +880,8 @@ const AdminDashboard: React.FC = () => {
                                 <p className="text-white font-medium">{notification.application_data.nome}</p>
                               </div>
                               <div>
-                                <span className="text-gray-400">CPF:</span>
-                                <p className="text-white">{notification.application_data.cpf}</p>
+                                <span className="text-gray-400">ID:</span>
+                                <p className="text-white">{notification.application_data.id_game}</p>
                               </div>
                               <div>
                                 <span className="text-gray-400">Idade:</span>

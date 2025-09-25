@@ -43,7 +43,7 @@ export interface Notification {
   created_at: string;
   application_data?: {
     nome: string;
-    cpf: string;
+    id_game: string;
     idade: string;
     telefone: string;
   };
@@ -90,7 +90,7 @@ export interface PurchaseRequest {
 export interface JobApplication {
   id: string;
   full_name: string;
-  cpf: string;
+  id_game: string;
   age: number;
   phone: string;
   status: 'pending' | 'approved' | 'rejected';

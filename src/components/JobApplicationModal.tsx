@@ -10,9 +10,9 @@ interface JobApplicationModalProps {
 const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ onClose }) => {
   const [formData, setFormData] = useState({
     nome: '',
-    cpf: '',
     idade: '',
-    telefone: ''
+    telefone: '',
+    id_game: ''
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,16 +25,8 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ onClose }) =>
     setError('');
 
     // Validações básicas
-    if (!formData.nome || !formData.cpf || !formData.idade || !formData.telefone) {
+    if (!formData.nome || !formData.idade || !formData.telefone || !formData.id_game) {
       setError('Todos os campos são obrigatórios');
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Validar CPF (formato básico)
-    const cpfRegex = /^\d+$/; // Aceitar qualquer quantidade de números
-    if (!cpfRegex.test(formData.cpf)) {
-      setError('CPF deve conter apenas números');
       setIsSubmitting(false);
       return;
     }
@@ -55,6 +47,14 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ onClose }) =>
       return;
     }
 
+    // Validar ID game
+    const idGame = /^\d+$/; // Aceitar qualquer quantidade de números
+    if (!idGame.test(formData.id_game)) {
+      setError('ID deve conter apenas números');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       // Salvar candidatura na tabela job_applications
       const { error: insertError } = await supabase
@@ -62,9 +62,10 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ onClose }) =>
         .insert([
           {
             full_name: formData.nome,
-            cpf: formData.cpf,
+            id_game: parseInt(formData.id_game),
             age: parseInt(formData.idade),
-            phone: formData.telefone
+            phone: formData.telefone,
+            status: "pending"
           }
         ]);
 
@@ -78,14 +79,14 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ onClose }) =>
         .from('notifications')
         .insert({
           type: 'job_application',
-          message: `Nova candidatura recebida: ${formData.nome} (CPF: ${formData.cpf}, Idade: ${formData.idade}, Tel: ${formData.telefone})`,
+          message: `Nova candidatura recebida: ${formData.nome} (ID: ${formData.id_game}, Idade: ${formData.idade}, Tel: ${formData.telefone})`,
           is_read: false
         });
 
       // Limpar formulário
       setFormData({
         nome: '',
-        cpf: '',
+        id_game: '',
         idade: '',
         telefone: ''
       });
@@ -103,12 +104,6 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ onClose }) =>
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const formatCPF = (value: string) => {
-    const numbers = value.replace(/\D/g, '');
-    // Permitir qualquer quantidade de números
-    return numbers.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
   };
 
   const formatPhone = (value: string) => {
@@ -192,7 +187,7 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ onClose }) =>
           <div>
             <label className="block text-white font-medium mb-2">
               <User className="h-4 w-4 inline mr-2" />
-              Nome Completo
+              Nome (in-game)
             </label>
             <input
               type="text"
@@ -200,21 +195,6 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ onClose }) =>
               onChange={(e) => setFormData(prev => ({ ...prev, nome: e.target.value }))}
               className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-green-600 focus:outline-none"
               placeholder="Seu nome completo"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-white font-medium mb-2">
-              <FileText className="h-4 w-4 inline mr-2" />
-              CPF
-            </label>
-            <input
-              type="text"
-              value={formData.cpf}
-              onChange={(e) => setFormData(prev => ({ ...prev, cpf: formatCPF(e.target.value) }))}
-              className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-green-600 focus:outline-none"
-              placeholder="Digite apenas números"
               required
             />
           </div>
@@ -238,8 +218,23 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ onClose }) =>
 
           <div>
             <label className="block text-white font-medium mb-2">
+              <FileText className="h-4 w-4 inline mr-2" />
+              ID (in game)
+            </label>
+            <input
+              type="text"
+              value={formData.id_game}
+              onChange={(e) => setFormData(prev => ({ ...prev, id_game: e.target.value }))}
+              className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:border-green-600 focus:outline-none"
+              placeholder="Digite apenas números"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-white font-medium mb-2">
               <Phone className="h-4 w-4 inline mr-2" />
-              Telefone
+              Telefone in-game
             </label>
             <input
               type="text"

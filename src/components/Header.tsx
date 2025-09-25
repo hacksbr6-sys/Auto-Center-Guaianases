@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Settings, Bell, LogOut, User, Shield, Users } from 'lucide-react';
+import { Settings, Bell, LogOut, User, Shield, Users, Wrench, FilePenLine, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getCurrentUser, logout, canAccessRoute, canAccessAdmin } from '../lib/auth';
 import { useNotifications } from '../hooks/useSupabase';
@@ -12,11 +12,11 @@ const Header: React.FC = () => {
   const currentUser = getCurrentUser();
   const { unreadCount } = useNotifications();
   const [showJobApplications, setShowJobApplications] = useState(false);
-  
+
   // Define navigation items based on user type and permissions
   const getNavItems = () => {
     const baseItems = [{ path: '/', label: 'Início' }];
-    
+
     if (!currentUser) {
       return [
         ...baseItems,
@@ -24,7 +24,7 @@ const Header: React.FC = () => {
         { path: '/invoices', label: 'Notas Fiscais' }
       ];
     }
-    
+
     switch (currentUser.type) {
       case 'client':
         return [
@@ -32,12 +32,12 @@ const Header: React.FC = () => {
           { path: '/cars', label: 'Revenda' },
           { path: '/invoices', label: 'Notas Fiscais' }
         ];
-        
+
       case 'mechanic':
         if (!currentUser.approved) {
           return [{ path: '/', label: 'Início' }];
         }
-        
+
         // Navegação baseada no cargo do mecânico
         const position = currentUser.position || 'colaborador';
         const mechanicItems = [
@@ -46,9 +46,9 @@ const Header: React.FC = () => {
           { path: '/workshop', label: 'Oficina' },
           { path: '/invoices', label: 'Notas Fiscais' }
         ];
-        
+
         return mechanicItems;
-        
+
       case 'admin':
         return [
           ...baseItems,
@@ -56,14 +56,14 @@ const Header: React.FC = () => {
           { path: '/workshop', label: 'Oficina' },
           { path: '/invoices', label: 'Notas Fiscais' }
         ];
-        
+
       default:
         return baseItems;
     }
   };
-  
+
   const navItems = getNavItems();
-  
+
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -73,7 +73,7 @@ const Header: React.FC = () => {
   const getUserTypeLabel = (type: string) => {
     switch (type) {
       case 'client': return 'Cliente';
-      case 'mechanic': 
+      case 'mechanic':
         if (currentUser?.position) {
           const positions = {
             'colaborador': 'Colaborador',
@@ -92,10 +92,10 @@ const Header: React.FC = () => {
 
   const getUserStatusColor = () => {
     if (!currentUser) return 'text-gray-400';
-    
+
     switch (currentUser.type) {
       case 'client': return 'text-blue-400';
-      case 'mechanic': 
+      case 'mechanic':
         if (!currentUser.approved) return 'text-yellow-400';
         // Different colors for different positions
         const positionColors = {
@@ -158,7 +158,7 @@ const Header: React.FC = () => {
   const getAdminPanelLabel = () => {
     if (!currentUser) return 'Painel Admin';
     if (currentUser.type === 'admin') return 'Painel Admin';
-    
+
     const position = currentUser.position || 'colaborador';
     switch (position) {
       case 'encarregado':
@@ -195,16 +195,15 @@ const Header: React.FC = () => {
             {navItems.map((item) => {
               // Verificar se o usuário pode acessar esta rota
               if (!canAccessRoute(item.path)) return null;
-              
+
               return (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`relative px-3 py-2 text-sm font-medium transition-colors ${
-                    location.pathname === item.path
-                      ? 'text-red-400'
-                      : 'text-white hover:text-red-400'
-                  }`}
+                  className={`relative px-3 py-2 text-sm font-medium transition-colors ${location.pathname === item.path
+                    ? 'text-red-400'
+                    : 'text-white hover:text-red-400'
+                    }`}
                 >
                   {item.label}
                   {location.pathname === item.path && (
@@ -222,55 +221,68 @@ const Header: React.FC = () => {
           <div className="flex items-center space-x-4">
             {currentUser ? (
               <div className="flex items-center space-x-4">
-                {/* Job Applications Button for Mechanics */}
-                {currentUser.type === 'mechanic' && currentUser.approved && (
-                  <button
-                    onClick={() => setShowJobApplications(true)}
-                    className="relative flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
-                  >
-                    <Users className="h-4 w-4 text-white" />
-                    <span className="text-white text-sm font-medium">
-                      Candidaturas
-                    </span>
-                  </button>
-                )}
-                
                 {/* Supervisor Panel Access for Encarregados */}
                 {currentUser.type === 'mechanic' && currentUser.approved && currentUser.position === 'encarregado' && (
-                  <Link
-                    to="/supervisor"
-                    className="relative flex items-center space-x-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors"
-                  >
-                    <Bell className="h-4 w-4 text-white" />
-                    {unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-yellow-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                        {unreadCount}
+                  <>
+                    {/* Job Applications Button for Mechanics */}
+                    <button
+                      onClick={() => setShowJobApplications(true)}
+                      className="relative flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
+                    >
+                      <Users className="h-4 w-4 text-white" />
+                      <span className="text-white text-sm font-medium">
+                        Candidaturas
                       </span>
-                    )}
-                    <span className="text-white text-sm font-medium">
-                      Painel Encarregado
-                    </span>
-                  </Link>
+                    </button>
+                    <Link
+                      to="/supervisor"
+                      className="relative flex items-center space-x-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors"
+                    >
+                      <Bell className="h-4 w-4 text-white" />
+                      {unreadCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-yellow-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                          {unreadCount}
+                        </span>
+                      )}
+                      <span className="text-white text-sm font-medium">
+                        Painel Encarregado
+                      </span>
+                    </Link>
+                  </>
+
                 )}
-                
+
                 {/* Manager Panel Access */}
                 {canAccessManagerPanel() && (
-                  <Link
-                    to="/manager"
-                    className="relative flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition-colors"
-                  >
-                    <Bell className="h-4 w-4 text-white" />
-                    {unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-yellow-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                        {unreadCount}
+                  <>
+                    {/* Job Applications Button for Mechanics */}
+                    <button
+                      onClick={() => setShowJobApplications(true)}
+                      className="relative flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
+                    >
+                      <Users className="h-4 w-4 text-white" />
+                      <span className="text-white text-sm font-medium">
+                        Candidaturas
                       </span>
-                    )}
-                    <span className="text-white text-sm font-medium">
-                      Painel Gerencial
-                    </span>
-                  </Link>
+                    </button>
+
+                    <Link
+                      to="/manager"
+                      className="relative flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition-colors"
+                    >
+                      <Bell className="h-4 w-4 text-white" />
+                      {unreadCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-yellow-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                          {unreadCount}
+                        </span>
+                      )}
+                      <span className="text-white text-sm font-medium">
+                        Painel Gerencial
+                      </span>
+                    </Link>
+                  </>
                 )}
-                
+
                 {/* Admin Panel Access */}
                 {canAccessAdminPanel() && !canAccessManagerPanel() && currentUser.position !== 'encarregado' && currentUser.position !== 'sub_regional' && currentUser.position !== 'regional' && (
                   <Link
@@ -297,43 +309,69 @@ const Header: React.FC = () => {
                     </span>
                   </Link>
                 )}
-                
+
                 {/* Regional Panel Access */}
                 {currentUser.type === 'mechanic' && currentUser.approved && currentUser.position === 'regional' && (
-                  <Link
-                    to="/regional"
-                    className="relative flex items-center space-x-2 bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors"
-                  >
-                    <Bell className="h-4 w-4 text-white" />
-                    {unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-yellow-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                        {unreadCount}
+                  <>
+                    {/* Job Applications Button for Mechanics */}
+                    <button
+                      onClick={() => setShowJobApplications(true)}
+                      className="relative flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
+                    >
+                      <Users className="h-4 w-4 text-white" />
+                      <span className="text-white text-sm font-medium">
+                        Candidaturas
                       </span>
-                    )}
-                    <span className="text-white text-sm font-medium">
-                      Painel Regional
-                    </span>
-                  </Link>
+                    </button>
+
+                    <Link
+                      to="/regional"
+                      className="relative flex items-center space-x-2 bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors"
+                    >
+                      <Bell className="h-4 w-4 text-white" />
+                      {unreadCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-yellow-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                          {unreadCount}
+                        </span>
+                      )}
+                      <span className="text-white text-sm font-medium">
+                        Painel Regional
+                      </span>
+                    </Link>
+                  </>
                 )}
-                
+
                 {/* Sub Regional Panel Access */}
                 {currentUser.type === 'mechanic' && currentUser.approved && currentUser.position === 'sub_regional' && (
-                  <Link
-                    to="/subregional"
-                    className="relative flex items-center space-x-2 bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded-lg transition-colors"
-                  >
-                    <Bell className="h-4 w-4 text-white" />
-                    {unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-yellow-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                        {unreadCount}
+                  <>
+                    {/* Job Applications Button for Mechanics */}
+                    <button
+                      onClick={() => setShowJobApplications(true)}
+                      className="relative flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors"
+                    >
+                      <Users className="h-4 w-4 text-white" />
+                      <span className="text-white text-sm font-medium">
+                        Candidaturas
                       </span>
-                    )}
-                    <span className="text-white text-sm font-medium">
-                      Painel Sub Regional
-                    </span>
-                  </Link>
+                    </button>
+
+                    <Link
+                      to="/subregional"
+                      className="relative flex items-center space-x-2 bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded-lg transition-colors"
+                    >
+                      <Bell className="h-4 w-4 text-white" />
+                      {unreadCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-yellow-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                          {unreadCount}
+                        </span>
+                      )}
+                      <span className="text-white text-sm font-medium">
+                        Painel Sub Regional
+                      </span>
+                    </Link>
+                  </>
                 )}
-                
+
                 {/* User Info */}
                 <div className="flex items-center space-x-2">
                   <div className="flex items-center space-x-2">
@@ -352,7 +390,7 @@ const Header: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  
+
                   <button
                     onClick={handleLogout}
                     className="flex items-center space-x-1 text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-800"
@@ -364,24 +402,40 @@ const Header: React.FC = () => {
               </div>
             ) : (
               <div className="flex items-center space-x-4">
-                <Link
-                  to="/login"
-                  className="text-gray-400 hover:text-white text-sm transition-colors"
-                >
-                  Login
-                </Link>
                 <div className="flex items-center space-x-2">
                   <Link
                     to="/register/client"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 flex gap-2   rounded-lg text-sm transition-colors"
                   >
+                    <User className="h-4 w-4 text-white" />
                     Cliente
                   </Link>
+
                   <Link
                     to="/register/mechanic"
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition-colors"
+                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 flex gap-2 rounded-lg text-sm transition-colors"
                   >
+                    <Wrench className="h-4 w-4 text-white" />
                     Mecânico
+                  </Link>
+
+                  <button
+                    onClick={() => setShowJobApplications(true)}
+                    className="relative flex items-center space-x-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <FilePenLine className="h-4 w-4 text-white" />
+
+                    <span className="text-white text-sm font-medium">
+                      Candidaturas
+                    </span>
+                  </button>
+
+                  <Link
+                    to="/login"
+                    className="text-gray-400 hover:text-white text-sm flex gap-2 transition-colors"
+                  >
+                    <Lock className="h-4 w-4 text-white" />
+                    Login
                   </Link>
                 </div>
               </div>
@@ -395,16 +449,15 @@ const Header: React.FC = () => {
         <div className="flex overflow-x-auto py-2 px-4 space-x-4">
           {navItems.map((item) => {
             if (!canAccessRoute(item.path)) return null;
-            
+
             return (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`whitespace-nowrap px-3 py-2 text-sm font-medium transition-colors ${
-                  location.pathname === item.path
-                    ? 'text-red-400'
-                    : 'text-white hover:text-red-400'
-                }`}
+                className={`whitespace-nowrap px-3 py-2 text-sm font-medium transition-colors ${location.pathname === item.path
+                  ? 'text-red-400'
+                  : 'text-white hover:text-red-400'
+                  }`}
               >
                 {item.label}
               </Link>

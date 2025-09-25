@@ -7,8 +7,8 @@ import { getCurrentUser } from '../lib/auth';
 interface JobApplication {
   id: string;
   full_name: string;
-  cpf: string;
   age: number;
+  id_game: string;
   phone: string;
   status: 'pending' | 'approved' | 'rejected';
   created_at: string;
@@ -62,7 +62,7 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(app =>
         app.full_name.toLowerCase().includes(term) ||
-        app.cpf.includes(term) ||
+        app.id_game.toString().includes(term) ||
         app.phone.includes(term)
       );
     }
@@ -146,7 +146,7 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
 
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4">
+      <div className="fixed h-[100vh] inset-0 bg-black/75 flex items-center justify-center z-50 p-4">
         <div className="bg-gray-900 rounded-xl p-8 border border-blue-600">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4 mx-auto"></div>
@@ -157,12 +157,14 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
     );
   }
 
+  console.log(applications)
+
   return (
-    <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4">
+    <div className="absolute h-[100vh] inset-0 bg-black/75 flex items-center justify-center z-50 p-4 top-">
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-gray-900 rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-blue-600"
+        className="bg-gray-900 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-blue-600"
       >
         {/* Header */}
         <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 p-6 flex items-center justify-between">
@@ -189,7 +191,7 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
                 <Search className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Buscar por nome, CPF ou telefone..."
+                  placeholder="Buscar por nome, ID ou telefone..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full bg-black/50 border border-gray-700 rounded-lg pl-10 pr-4 py-3 text-white focus:border-blue-600 focus:outline-none"
@@ -209,7 +211,7 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
               </select>
             </div>
           </div>
-          
+
           <div className="mt-4 text-sm text-gray-400">
             Mostrando {filteredApplications.length} de {applications.length} candidaturas
           </div>
@@ -224,8 +226,8 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
                 {searchTerm || statusFilter !== 'all' ? 'Nenhuma candidatura encontrada' : 'Nenhuma candidatura recebida'}
               </h3>
               <p className="text-gray-500">
-                {searchTerm || statusFilter !== 'all' 
-                  ? 'Tente ajustar os filtros de busca' 
+                {searchTerm || statusFilter !== 'all'
+                  ? 'Tente ajustar os filtros de busca'
                   : 'As candidaturas aparecerão aqui quando alguém se inscrever'
                 }
               </p>
@@ -250,13 +252,13 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
                           {getStatusLabel(application.status)}
                         </span>
                       </div>
-                      
+
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         <div className="flex items-center space-x-2">
                           <FileText className="h-4 w-4 text-green-400" />
                           <div>
-                            <span className="text-gray-400">CPF:</span>
-                            <p className="text-white font-medium">{application.cpf}</p>
+                            <span className="text-gray-400">ID:</span>
+                            <p className="text-white font-medium">{application.id_game}</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -302,13 +304,6 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
                           </button>
                         </>
                       )}
-                      <button
-                        onClick={() => deleteApplication(application.id)}
-                        className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-lg font-medium transition-colors"
-                        title="Excluir candidatura"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
                     </div>
                   </div>
                 </motion.div>
@@ -319,4 +314,13 @@ const JobApplicationsManager: React.FC<JobApplicationsManagerProps> = ({ onClose
 
         {/* Footer */}
         <div className="border-t border-gray-800 p-6">
-          <div className="flex
+          <div className="flex">
+
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
+export default JobApplicationsManager;
