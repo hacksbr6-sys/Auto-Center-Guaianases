@@ -1,23 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  ArrowLeft, 
-  Users, 
-  Car, 
-  FileText, 
-  Bell, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Check, 
-  X, 
-  Save,
-  Eye,
-  AlertCircle,
-  Settings,
-  Shield
-} from 'lucide-react';
+import { ArrowLeft, Users, Car, FileText, Bell, Plus, CreditCard as Edit, Trash2, Check, X, Save, Eye, AlertCircle, Settings, Shield } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { getCurrentUser } from '../lib/auth';
 import { useNotifications, useCars, useMechanics, useClients, useInvoices } from '../hooks/useSupabase';
@@ -253,7 +237,7 @@ const RegionalDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-red-950 via-black to-red-950">
       {/* Header */}
       <div className="bg-black/90 backdrop-blur-sm border-b-2 border-red-600">
         <div className="max-w-7xl mx-auto px-4">
@@ -624,7 +608,6 @@ const RegionalDashboard: React.FC = () => {
                             {notification.type === 'car_sale' && 'Venda de Veículo'}
                             {notification.type === 'invoice' && 'Nova Nota Fiscal'}
                             {notification.type === 'mechanic_registration' && 'Registro de Mecânico'}
-                            {notification.type === 'job_application' && 'Candidatura de Emprego'}
                             {notification.type === 'general' && 'Geral'}
                           </span>
                           {!notification.is_read && (
@@ -638,45 +621,6 @@ const RegionalDashboard: React.FC = () => {
                         }`}>
                           {notification.message}
                         </p>
-                        
-                        {/* Mostrar dados da candidatura se for job_application */}
-                        {notification.type === 'job_application' && notification.application_data && (
-                          <div className="mt-3 bg-gray-800 rounded-lg p-3 border border-gray-700">
-                            <h5 className="text-white font-medium mb-2">Dados do Candidato:</h5>
-                            <div className="grid grid-cols-2 gap-2 text-sm">
-                              <div>
-                                <span className="text-gray-400">Nome:</span>
-                                <p className="text-white font-medium">{notification.application_data.nome}</p>
-                              </div>
-                              <div>
-                                <span className="text-gray-400">ID:</span>
-                                <p className="text-white">{notification.application_data.id_game}</p>
-                              </div>
-                              <div>
-                                <span className="text-gray-400">Idade:</span>
-                                <p className="text-white">{notification.application_data.idade} anos</p>
-                              </div>
-                              <div>
-                                <span className="text-gray-400">Telefone:</span>
-                                <p className="text-white">{notification.application_data.telefone}</p>
-                              </div>
-                            </div>
-                            
-                            {/* Botões de ação para candidaturas */}
-                            <div className="flex space-x-2 mt-4">
-                              <button className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
-                                Entrar em Contato
-                              </button>
-                              <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
-                                Agendar Entrevista
-                              </button>
-                              <button className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
-                                Arquivar
-                              </button>
-                            </div>
-                          </div>
-                        )}
-                        
                         <p className="text-gray-500 text-sm mt-2">
                           {new Date(notification.created_at).toLocaleString('pt-BR')}
                         </p>
