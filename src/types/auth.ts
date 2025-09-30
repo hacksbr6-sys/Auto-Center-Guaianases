@@ -45,7 +45,7 @@ export interface AuthUser {
   id: string;
   full_name: string;
   email: string;
-  type: 'client' | 'mechanic' | 'admin';
+  type: 'client' | 'mechanic' | 'admin' | 'proprietario';
   permissions?: MechanicPermissions;
 }
 
