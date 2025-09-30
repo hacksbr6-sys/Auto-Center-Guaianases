@@ -1,28 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  ArrowLeft, 
-  Users, 
-  Car, 
-  FileText, 
-  Bell, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Check, 
-  X, 
-  Save,
-  Eye,
-  AlertCircle,
-  Settings,
-  Shield,
-  UserX
-} from 'lucide-react';
+import { ArrowLeft, Users, Car, FileText, Bell, Plus, CreditCard as Edit, Trash2, Check, X, Save, Eye, AlertCircle, Settings, Shield, UserX } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { getCurrentUser } from '../lib/auth';
 import { useNotifications, useCars, useMechanics, useClients, useInvoices } from '../hooks/useSupabase';
-import JobApplicationsManager from '../components/JobApplicationsManager';
 
 interface CarForm {
   brand: string;
@@ -57,11 +39,10 @@ const AdminDashboard: React.FC = () => {
   const { clients, refetch: refetchClients } = useClients();
   const { invoices, refetch: refetchInvoices } = useInvoices();
   
-  const [activeTab, setActiveTab] = useState<'overview' | 'cars' | 'mechanics' | 'clients' | 'invoices' | 'notifications' | 'applications'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'cars' | 'mechanics' | 'clients' | 'invoices' | 'notifications'>('overview');
   const [showAddCarModal, setShowAddCarModal] = useState(false);
   const [showEditMechanicModal, setShowEditMechanicModal] = useState(false);
   const [showEditClientModal, setShowEditClientModal] = useState(false);
-  const [showJobApplications, setShowJobApplications] = useState(false);
   const [selectedMechanic, setSelectedMechanic] = useState<any>(null);
   const [selectedClient, setSelectedClient] = useState<any>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -379,7 +360,7 @@ const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-red-950 via-black to-red-950">
       {/* Header */}
       <div className="bg-black/90 backdrop-blur-sm border-b-2 border-red-600">
         <div className="max-w-7xl mx-auto px-4">
@@ -421,8 +402,7 @@ const AdminDashboard: React.FC = () => {
             { id: 'mechanics', label: 'Gestão de Mecânicos', icon: Users },
             { id: 'clients', label: 'Gestão de Clientes', icon: Users },
             { id: 'invoices', label: 'Notas Fiscais', icon: FileText },
-            { id: 'notifications', label: 'Notificações', icon: Bell },
-            { id: 'applications', label: 'Candidaturas', icon: Users }
+            { id: 'notifications', label: 'Notificações', icon: Bell }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -503,7 +483,6 @@ const AdminDashboard: React.FC = () => {
                   <p className="text-white font-medium">✅ Gestão Completa de Mecânicos</p>
                   <p className="text-white font-medium">✅ Gestão Completa de Clientes</p>
                   <p className="text-white font-medium">✅ Visualizar/Deletar Notas Fiscais</p>
-                  <p className="text-white font-medium">✅ Gerenciar Candidaturas de Emprego</p>
                 </div>
                 <div className="space-y-2">
                   <p className="text-white font-medium">✅ Aprovar/Reprovar Mecânicos</p>
@@ -610,13 +589,15 @@ const AdminDashboard: React.FC = () => {
                       <div>
                         <span className="text-gray-400 text-sm">Cargo:</span>
                         <p className={`font-medium ${
+                          mechanic.position === 'proprietario' ? 'text-yellow-400' :
                           mechanic.position === 'regional' ? 'text-red-400' :
                           mechanic.position === 'sub_regional' ? 'text-orange-400' :
                           mechanic.position === 'gerente' ? 'text-purple-400' :
                           mechanic.position === 'encarregado' ? 'text-green-400' :
                           'text-blue-400'
                         }`}>
-                          {mechanic.position === 'regional' ? 'Regional' :
+                          {mechanic.position === 'proprietario' ? 'Proprietário Responsável' :
+                           mechanic.position === 'regional' ? 'Regional' :
                            mechanic.position === 'sub_regional' ? 'Sub Regional' :
                            mechanic.position === 'gerente' ? 'Gerente' :
                            mechanic.position === 'encarregado' ? 'Encarregado' :
@@ -764,43 +745,6 @@ const AdminDashboard: React.FC = () => {
             </div>
           </motion.div>
         )}
-        {/* Job Applications Tab */}
-        {activeTab === 'applications' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
-          >
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-white">Candidaturas de Emprego</h2>
-              <button
-                onClick={() => setShowJobApplications(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition-colors flex items-center space-x-2"
-              >
-                <Users className="h-4 w-4" />
-                <span>Gerenciar Candidaturas</span>
-              </button>
-            </div>
-            
-            <div className="bg-blue-600/10 border border-blue-600 rounded-xl p-6">
-              <h3 className="text-xl font-bold text-blue-400 mb-4">Sistema de Candidaturas</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <p className="text-white font-medium">📋 Visualizar todas as candidaturas</p>
-                  <p className="text-white font-medium">✅ Aprovar candidatos qualificados</p>
-                  <p className="text-white font-medium">❌ Rejeitar candidatos inadequados</p>
-                  <p className="text-white font-medium">🗑️ Excluir candidaturas antigas</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-white font-medium">🔍 Buscar por nome, ID ou telefone</p>
-                  <p className="text-white font-medium">📊 Filtrar por status da candidatura</p>
-                  <p className="text-white font-medium">📞 Dados de contato completos</p>
-                  <p className="text-white font-medium">👥 Converter aprovados em mecânicos</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
 
         {/* Notifications Tab */}
         {activeTab === 'notifications' && (
@@ -855,7 +799,6 @@ const AdminDashboard: React.FC = () => {
                             {notification.type === 'car_sale' && 'Venda de Veículo'}
                             {notification.type === 'invoice' && 'Nova Nota Fiscal'}
                             {notification.type === 'mechanic_registration' && 'Registro de Mecânico'}
-                            {notification.type === 'job_application' && 'Candidatura de Emprego'}
                             {notification.type === 'general' && 'Geral'}
                           </span>
                           {!notification.is_read && (
@@ -869,48 +812,6 @@ const AdminDashboard: React.FC = () => {
                         }`}>
                           {notification.message}
                         </p>
-                        
-                        {/* Mostrar dados da candidatura se for job_application */}
-                        {notification.type === 'job_application' && notification.application_data && (
-                          <div className="mt-3 bg-gray-800 rounded-lg p-3 border border-gray-700">
-                            <h5 className="text-white font-medium mb-2">Dados do Candidato:</h5>
-                            <div className="grid grid-cols-2 gap-2 text-sm">
-                              <div>
-                                <span className="text-gray-400">Nome:</span>
-                                <p className="text-white font-medium">{notification.application_data.nome}</p>
-                              </div>
-                              <div>
-                                <span className="text-gray-400">ID:</span>
-                                <p className="text-white">{notification.application_data.id_game}</p>
-                              </div>
-                              <div>
-                                <span className="text-gray-400">Idade:</span>
-                                <p className="text-white">{notification.application_data.idade} anos</p>
-                              </div>
-                              <div>
-                                <span className="text-gray-400">Telefone:</span>
-                                <p className="text-white">{notification.application_data.telefone}</p>
-                              </div>
-                            </div>
-                            
-                            {/* Botões de ação para candidaturas - ADMEC */}
-                            <div className="flex space-x-2 mt-4">
-                              <button className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
-                                Aprovar Candidato
-                              </button>
-                              <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
-                                Agendar Entrevista
-                              </button>
-                              <button className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
-                                Criar Conta Mecânico
-                              </button>
-                              <button className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
-                                Rejeitar
-                              </button>
-                            </div>
-                          </div>
-                        )}
-                        
                         <p className="text-gray-500 text-sm mt-2">
                           {new Date(notification.created_at).toLocaleString('pt-BR')}
                         </p>
@@ -933,11 +834,6 @@ const AdminDashboard: React.FC = () => {
           </motion.div>
         )}
       </div>
-
-      {/* Job Applications Modal */}
-      {showJobApplications && (
-        <JobApplicationsManager onClose={() => setShowJobApplications(false)} />
-      )}
 
       {/* Add Car Modal */}
       {showAddCarModal && (
@@ -1124,6 +1020,7 @@ const AdminDashboard: React.FC = () => {
                   <option value="gerente">Gerente</option>
                   <option value="sub_regional">Sub Regional</option>
                   <option value="regional">Regional</option>
+                  <option value="proprietario">Proprietário Responsável</option>
                 </select>
               </div>
 
