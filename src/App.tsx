@@ -11,6 +11,7 @@ import RegisterClient from './pages/RegisterClient';
 import RegisterMechanic from './pages/RegisterMechanic';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import ProprietarioDashboard from './pages/ProprietarioDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
 import SupervisorDashboard from './pages/SupervisorDashboard';
 import RegionalDashboard from './pages/RegionalDashboard';
@@ -84,7 +85,14 @@ function App() {
             <AdminDashboard />
           </ProtectedRoute>
         } />
-        
+
+        {/* Proprietario Routes */}
+        <Route path="/proprietario" element={
+          <ProtectedRoute route="/proprietario" requiredUserType="proprietario" requireAuth={true}>
+            <ProprietarioDashboard />
+          </ProtectedRoute>
+        } />
+
         {/* Manager Routes */}
         <Route path="/manager" element={
           <ProtectedRoute route="/manager" requireAuth={true}>
